@@ -26,3 +26,38 @@ We have divided our application into two parts: `client` and `server`.
 - [x] Handle the OAuth callback and securely manage tokens
 - [x] Display user information after successful authentication
 - [x] Ensure the library is platform-agnostic, capable of running in both browser and server environments without relying on browser-specific APIs
+
+### Live URLS
+
+- **Frontend** - https://oauth2-client-library.vercel.app/
+- **Backend** - https://oauth2-client-library.onrender.com
+
+The backend is live and deployed, but there's a known issue within the Render community where, after deployment, fetch requests to the web service sometimes fail. The application works fine locally and displays all the necessary data, but I'm still working on a solution to resolve this issue as quickly as possible.
+
+### Previews
+
+1. !["login"](login.png)
+
+2. !["auth0"](auth0.png)
+
+3. !["user info"](preview.png)
+
+### Local Set-Up
+
+```bash
+$ git clone https://github.com/SanyamPunia/oauth2-client-library
+$ cd oauth2-client-library
+
+
+# for client setup
+$ cd client
+$ npm install
+$ npm start
+
+# for backend setup
+$ cd server
+$ npm install
+$ npm start
+```
+
+By default, frontend runs on the PORT=3000, & server runs on the PORT=3001

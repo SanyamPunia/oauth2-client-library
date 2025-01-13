@@ -7,25 +7,23 @@ import crypto from "crypto";
 
 dotenv.config({ path: "../.env" });
 
-const frontEndUrl = "https://oauth2-client-library.vercel.app";
+const isProduction = process.env.NODE_ENV === "production";
+const frontEndUrl = isProduction
+  ? "https://oauth2-client-library.vercel.app"
+  : "http://localhost:3000";
 
 const app = express();
 const port = 3001;
 
-app.use(
-  cors({
-    origin: "https://oauth2-client-library.vercel.app",
-    credentials: true,
-  })
-);
+app.use(cors({ origin: frontEndUrl, credentials: true }));
 app.use(express.json());
 app.use(
   session({
-    secret: process.env.SESSION_SECRET,
+    secret: "secret",
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: true,
+      secure: isProduction,
       httpOnly: true,
       sameSite: "lax",
     },
@@ -37,7 +35,7 @@ try {
   oauthClient = new OAuthClient({
     clientId: process.env.AUTH0_CLIENT_ID,
     clientSecret: process.env.AUTH0_CLIENT_SECRET,
-    redirectUri: "https://oauth2-client-library.vercel.app/callback",
+    redirectUri: `${frontEndUrl}/callback`,
     authorizationEndpoint: `https://${process.env.AUTH0_DOMAIN}/authorize`,
     tokenEndpoint: `https://${process.env.AUTH0_DOMAIN}/oauth/token`,
     scope: "openid profile email offline_access",
