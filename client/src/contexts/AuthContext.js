@@ -2,8 +2,6 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 
 const AuthContext = createContext();
 
-const apiUrl = "https://oauth2-client-library.onrender.com";
-
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
@@ -22,9 +20,12 @@ export const AuthProvider = ({ children }) => {
 
   const checkAuthStatus = async () => {
     try {
-      const response = await fetch(`${apiUrl}/api/user`, {
-        credentials: "include",
-      });
+      const response = await fetch(
+        "https://oauth2-client-library.onrender.com/api/user",
+        {
+          credentials: "include",
+        }
+      );
       if (response.ok) {
         const userData = await response.json();
         setUser(userData);
@@ -37,9 +38,12 @@ export const AuthProvider = ({ children }) => {
 
   const login = async () => {
     try {
-      const response = await fetch(`${apiUrl}/api/login`, {
-        credentials: "include",
-      });
+      const response = await fetch(
+        "https://oauth2-client-library.onrender.com/api/login",
+        {
+          credentials: "include",
+        }
+      );
       const data = await response.json();
       window.location.href = data.authUrl;
     } catch (error) {
@@ -49,14 +53,17 @@ export const AuthProvider = ({ children }) => {
 
   const handleCallback = async (code, state) => {
     try {
-      const response = await fetch(`${apiUrl}/api/callback`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ code, state }),
-        credentials: "include",
-      });
+      const response = await fetch(
+        "https://oauth2-client-library.onrender.com/api/callback",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ code, state }),
+          credentials: "include",
+        }
+      );
       if (response.ok) {
         await checkAuthStatus();
       } else {
@@ -69,7 +76,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await fetch(`${apiUrl}/api/logout`, {
+      await fetch("https://oauth2-client-library.onrender.com/api/logout", {
         method: "POST",
         credentials: "include",
       });

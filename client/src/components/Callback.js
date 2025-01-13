@@ -14,9 +14,6 @@ const Callback = () => {
     const code = searchParams.get("code");
     const state = searchParams.get("state");
 
-    console.log("code", code);
-    console.log("state", state);
-
     if (code && state) {
       handleCallback(code, state)
         .then(() => {
