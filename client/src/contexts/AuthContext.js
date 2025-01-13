@@ -2,7 +2,7 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 
 const AuthContext = createContext();
 
-const apiUrl = process.env.REACT_APP_API_URL;
+const apiUrl = "https://oauth2-client-library.onrender.com";
 
 export const useAuth = () => {
   const context = useContext(AuthContext);

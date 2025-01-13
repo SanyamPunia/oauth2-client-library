@@ -7,10 +7,7 @@ import crypto from "crypto";
 
 dotenv.config({ path: "../.env" });
 
-const isProduction = process.env.NODE_ENV === "production";
-const frontEndUrl = isProduction
-  ? "https://oauth2-client-library.vercel.app"
-  : "http://localhost:3000";
+const frontEndUrl = "https://oauth2-client-library.vercel.app";
 
 const app = express();
 const port = 3001;
@@ -23,7 +20,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: isProduction,
+      secure: true,
       httpOnly: true,
       sameSite: "lax",
     },
