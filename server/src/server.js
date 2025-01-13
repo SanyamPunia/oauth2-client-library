@@ -12,7 +12,12 @@ const frontEndUrl = "https://oauth2-client-library.vercel.app";
 const app = express();
 const port = 3001;
 
-app.use(cors({ origin: frontEndUrl, credentials: true }));
+app.use(
+  cors({
+    origin: "https://oauth2-client-library.vercel.app",
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(
   session({
@@ -32,7 +37,7 @@ try {
   oauthClient = new OAuthClient({
     clientId: process.env.AUTH0_CLIENT_ID,
     clientSecret: process.env.AUTH0_CLIENT_SECRET,
-    redirectUri: `${frontEndUrl}/callback`,
+    redirectUri: "https://oauth2-client-library.vercel.app/callback",
     authorizationEndpoint: `https://${process.env.AUTH0_DOMAIN}/authorize`,
     tokenEndpoint: `https://${process.env.AUTH0_DOMAIN}/oauth/token`,
     scope: "openid profile email offline_access",
