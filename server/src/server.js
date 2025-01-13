@@ -9,7 +9,7 @@ dotenv.config({ path: "../.env" });
 
 const isProduction = process.env.NODE_ENV === "production";
 const frontEndUrl = isProduction
-  ? "https://your-production-url.com"
+  ? "https://oauth2-client-library.onrender.com"
   : "http://localhost:3000";
 
 const app = express();
