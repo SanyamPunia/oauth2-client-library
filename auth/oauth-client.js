@@ -57,6 +57,18 @@ class OAuthClient {
 
     const tokenResponse = await response.json();
     this.storeTokens(tokenResponse);
+
+    // store cookie for access token
+    if (typeof res !== "undefined") {
+      res.cookie("access_token", tokenResponse.access_token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 3600000, // 1 hour
+      });
+
+      res.status(200).send("OAuth authentication successful!");
+    }
     return tokenResponse;
   }
 

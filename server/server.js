@@ -2,10 +2,10 @@ import express from "express";
 import session from "express-session";
 import cors from "cors";
 import dotenv from "dotenv";
-import { OAuthClient } from "./auth/oauth-client.js";
 import crypto from "crypto";
+import { OAuthClient } from "../auth/oauth-client.js";
 
-dotenv.config({ path: "../.env" });
+dotenv.config();
 
 const isProduction = process.env.NODE_ENV === "production";
 const frontEndUrl = isProduction

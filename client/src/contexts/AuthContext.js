@@ -1,8 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
+import oauthClient from "../auth";
 
 const AuthContext = createContext();
-
-const apiUrl = process.env.REACT_APP_API_URL;
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -21,63 +20,61 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const checkAuthStatus = async () => {
-    try {
-      const response = await fetch(`${apiUrl}/api/user`, {
-        credentials: "include",
-      });
-      if (response.ok) {
-        const userData = await response.json();
+    const tokens = oauthClient.getStoredTokens();
+    if (tokens && tokens.access_token) {
+      try {
+        const userData = await fetchUserInfo(tokens.access_token);
         setUser(userData);
         setIsAuthenticated(true);
+      } catch (error) {
+        console.error("Error checking auth status:", error);
+        handleAuthError();
       }
-    } catch (error) {
-      console.error("Error checking auth status:", error);
     }
   };
 
-  const login = async () => {
-    try {
-      const response = await fetch(`${apiUrl}/api/login`, {
-        credentials: "include",
-      });
-      const data = await response.json();
-      window.location.href = data.authUrl;
-    } catch (error) {
-      console.error("Login error:", error);
-    }
+  const handleAuthError = () => {
+    setIsAuthenticated(false);
+    setUser(null);
+    oauthClient.clearTokens();
   };
 
-  const handleCallback = async (code, state) => {
+  const login = () => {
+    const { authUrl } = oauthClient.startAuthFlow();
+    window.location.href = authUrl;
+  };
+
+  const handleCallback = async (code) => {
     try {
-      const response = await fetch(`${apiUrl}/api/callback`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ code, state }),
-        credentials: "include",
-      });
-      if (response.ok) {
-        await checkAuthStatus();
-      } else {
-        throw new Error("Authentication failed");
-      }
+      const tokens = await oauthClient.handleCallback({ code });
+      const userData = await fetchUserInfo(tokens.access_token);
+      setUser(userData);
+      setIsAuthenticated(true);
     } catch (error) {
       console.error("Callback error:", error);
+      handleAuthError();
     }
   };
 
-  const logout = async () => {
-    try {
-      await fetch(`${apiUrl}/api/logout`, {
-        method: "POST",
-        credentials: "include",
-      });
-      setUser(null);
-      setIsAuthenticated(false);
-    } catch (error) {
-      console.error("Logout error:", error);
+  const logout = () => {
+    setUser(null);
+    setIsAuthenticated(false);
+    oauthClient.clearTokens();
+  };
+
+  const fetchUserInfo = async (accessToken) => {
+    const response = await fetch(
+      `https://${process.env.REACT_APP_AUTH0_DOMAIN}/userinfo`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch user info");
     }
+    return response.json();
   };
 
   return (
