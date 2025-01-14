@@ -18,11 +18,11 @@ const Callback = () => {
         })
         .catch((error) => {
           console.error("Error during callback:", error);
-          navigate("/login");
+          navigate("/");
         });
     } else {
       console.error("No code found in URL");
-      navigate("/login");
+      navigate("/");
     }
   }, [handleCallback, navigate, location]);
 
