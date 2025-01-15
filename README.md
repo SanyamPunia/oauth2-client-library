@@ -26,23 +26,6 @@ Our project is divided into three main directories:
 - [x] Display user information after successful authentication
 - [x] Ensure the library is platform-agnostic, capable of running in both browser and server environments without relying on browser-specific APIs
 
-## Known Issue (Currently Being Worked On)
-
-There is a known issue with the deployment of the application to production, specifically regarding the behavior of the OAuth callback in production environments.
-
-- **Issue**: After a user authenticates successfully and is redirected back to the callback route, the user data appears temporarily in local environments (e.g., localhost), even after an error is logged in the console. However, in production, the user data doesn't appear at all after an error.
-
-- **Current Status**: The issue seems to stem from differences in how the state is managed between local and production environments. I'm currently working on resolving this issue, as it seems to be related to either React's state management or routing behavior in production.
-
-This issue only impacts the production environment at the moment and will be addressed soon.
-
-## Live URLs
-
-- **Frontend** - https://oauth2-client-library.vercel.app/
-- **Backend** - https://oauth2-client-library.onrender.com
-
-The backend is live and deployed, but there's a known issue within the Render community where, after deployment, fetch requests to the web service sometimes fail. The application works fine locally and displays all the necessary data, but I'm still working on a solution to resolve this issue as quickly as possible.
-
 ## Previews
 
 1. !["login"](login.png)
